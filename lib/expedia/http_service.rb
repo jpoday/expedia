@@ -41,7 +41,9 @@ module Expedia
         # figure out our options for this request
         request_options = {:params => (verb == :get ? args : {})}
         # set up our Faraday connection
-        conn = Faraday.new(server(options), request_options)
+        conn = Faraday.new(server(options), request_options) do |builder|
+          builder.use Faraday::Adapter::EMHttp
+        end
         response = conn.send(verb, path, (verb == :post ? args : {}))
 
         # Log URL and params information
